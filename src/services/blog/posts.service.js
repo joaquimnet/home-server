@@ -13,6 +13,7 @@ module.exports = {
   routes: {
     'GET /posts': 'getPosts',
     'GET /posts/:slug': 'getPost',
+    'POST /posts/:slug/like': 'likePost',
     'POST /posts': 'createPost',
     'PATCH /posts/:id': 'editPost',
     'PUT /posts/:id': 'editPost',
@@ -63,7 +64,42 @@ module.exports = {
         if (!post) {
           return res.status(404).send(ERRORS.NOT_FOUND);
         }
+
+        try {
+          await Post.updateOne({ _id: post._id }, { $inc: { 'meta.views': 1 } }).exec();
+        } catch {}
+
+        post.meta.views += 1;
         res.send(post);
+      },
+    },
+    likePost: {
+      params: {
+        slug: 'string',
+        $$strict: true,
+      },
+      async handler(req, res) {
+        const params = { ...req.params, ...req.query, ...req.body };
+
+        let result;
+        try {
+          // post = await this.getPostBySlug(params.slug);
+          result = await Post.updateOne(
+            { slug: params.slug },
+            { $inc: { 'meta.likes': 1 } },
+          ).exec();
+        } catch (err) {
+          if (err instanceof Error.CastError) {
+            return res.status(404).send(ERRORS.NOT_FOUND);
+          }
+          log.error(err);
+          return res.status(500).send(ERRORS.GENERIC);
+        }
+
+        if (!result.n) {
+          return res.status(404).send(ERRORS.NOT_FOUND);
+        }
+        res.send({ message: 'Post liked successfully' });
       },
     },
     createPost: {
