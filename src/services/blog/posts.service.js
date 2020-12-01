@@ -231,7 +231,7 @@ module.exports = {
       return Post.findById(id).exec();
     },
     getPostBySlug(slug) {
-      return Post.findOne({ slug }).exec();
+      return Post.findOne({ slug }).populate('author', ['_id', 'username', 'email']).exec()
     },
     createSlug(str) {
       const random = '-' + randomBytes(4).toString('hex');
