@@ -15,6 +15,7 @@ module.exports = {
   name: 'posts',
   routes: {
     'GET /posts': 'getPosts',
+    'GET /posts/tags': 'getTags',
     'GET /posts/:slug': 'getPost',
     'POST /posts/:slug/like': 'likePost',
     'POST /posts': 'createPost',
@@ -227,6 +228,20 @@ module.exports = {
         }
 
         res.send(post);
+      },
+    },
+    getTags: {
+      params: {
+        $$strict: true,
+      },
+      async handler(req, res) {
+        try {
+          // TODO: cache this
+          return res.send(await Post.distinct('tags'));
+        } catch (err) {
+          log.error(err);
+          return res.status(500).send(ERRORS.GENERIC);
+        }
       },
     },
   },
