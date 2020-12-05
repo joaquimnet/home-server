@@ -3,6 +3,9 @@ const { Error } = require('mongoose');
 const log = require('consola');
 const slugify = require('slugify');
 const { randomBytes } = require('crypto');
+const cache = require('node-cache');
+
+const viewsCache = new cache({ stdTTL: 300, checkperiod: 360 });
 
 const { ERRORS } = require('../../config');
 const auth = require('../../middleware/jwt');
@@ -65,11 +68,15 @@ module.exports = {
           return res.status(404).send(ERRORS.NOT_FOUND);
         }
 
-        try {
-          await Post.updateOne({ _id: post._id }, { $inc: { 'meta.views': 1 } }).exec();
-        } catch {}
+        if (!viewsCache.get(`${req.ip}-${params.slug}`)) {
+          try {
+            await Post.updateOne({ _id: post._id }, { $inc: { 'meta.views': 1 } }).exec();
+          } catch {}
 
-        post.meta.views += 1;
+          post.meta.views += 1;
+        }
+
+        viewsCache.set(`${req.ip}-${params.slug}`, true);
         res.send(post);
       },
     },
@@ -231,7 +238,7 @@ module.exports = {
       return Post.findById(id).exec();
     },
     getPostBySlug(slug) {
-      return Post.findOne({ slug }).populate('author', ['_id', 'username', 'email']).exec()
+      return Post.findOne({ slug }).populate('author', ['_id', 'username', 'email']).exec();
     },
     createSlug(str) {
       const random = '-' + randomBytes(4).toString('hex');

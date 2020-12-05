@@ -15,6 +15,11 @@ app.use(morgan('tiny'));
 app.use(helmet());
 app.use(cors());
 
+app.use((req, res, next) => {
+  req.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  next();
+});
+
 ponaserv(app, {
   services: path.join(__dirname, 'services'),
   // debug: true,
