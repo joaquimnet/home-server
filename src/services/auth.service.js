@@ -129,6 +129,7 @@ module.exports = {
         $$strict: true,
       },
       async handler(req, res) {
+        return res.status(403).send({ message: 'Account creation is disabled for now' });
         const params = { ...req.body, ...req.query };
 
         const email = params.email.trim();
