@@ -247,7 +247,7 @@ module.exports = {
   },
   methods: {
     getAllPosts({ limit, offset }) {
-      return Post.find({}).limit(Number(limit)).skip(Number(offset)).exec();
+      return Post.find({}).limit(Number(limit)).skip(Number(offset)).sort({ createdAt: -1 }).exec();
     },
     getPostById(id) {
       return Post.findById(id).exec();
