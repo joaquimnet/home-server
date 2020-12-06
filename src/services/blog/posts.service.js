@@ -19,8 +19,8 @@ module.exports = {
     'GET /posts/:slug': 'getPost',
     'POST /posts/:slug/like': 'likePost',
     'POST /posts': 'createPost',
-    'PATCH /posts/:id': 'editPost',
-    'PUT /posts/:id': 'editPost',
+    'PATCH /posts/:slug': 'editPost',
+    'PUT /posts/:slug': 'editPost',
     'DELETE /posts/:id': 'deletePost',
   },
   actions: {
@@ -167,7 +167,7 @@ module.exports = {
           return res.status(500).send(ERRORS.GENERIC);
         }
 
-        if (post.author.toString() !== req.user._id.toString()) {
+        if (post.author._id.toString() !== req.user._id.toString()) {
           return res.status(403).send(ERRORS.AUTH.UNAUTHORIZED);
         }
 
@@ -184,7 +184,7 @@ module.exports = {
     editPost: {
       middleware: [express.json(), auth({ required: true })],
       params: {
-        id: 'string',
+        slug: 'string',
         title: { type: 'string', min: 3, max: 128, optional: true },
         content: { type: 'string', min: 3, optional: true },
         description: { type: 'string', min: 3, max: 280, optional: true },
@@ -196,7 +196,7 @@ module.exports = {
 
         let post;
         try {
-          post = await this.getPostById(params.id);
+          post = await this.getPostBySlug(params.slug);
           if (!post) {
             return res.status(404).send(ERRORS.NOT_FOUND);
           }
@@ -208,13 +208,13 @@ module.exports = {
           return res.status(500).send(ERRORS.GENERIC);
         }
 
-        if (post.author.toString() !== req.user._id.toString()) {
+        if (post.author._id.toString() !== req.user._id.toString()) {
           return res.status(403).send(ERRORS.AUTH.UNAUTHORIZED);
         }
 
         if (params.title) {
           post.title = params.title;
-          post.slug = this.createSlug(params.title);
+          // post.slug = this.createSlug(params.title);
         }
         if (params.content) post.content = params.content;
         if (params.description) post.description = params.description;
