@@ -30,9 +30,7 @@ module.exports = {
         offset: { type: 'number', convert: true, default: 0, optional: true },
         $$strict: true,
       },
-      async handler(req, res) {
-        const params = { ...req.params, ...req.query, ...req.body };
-
+      async handler({ req, res, params }) {
         let posts;
         try {
           posts = await this.getAllPosts(params);
@@ -51,9 +49,7 @@ module.exports = {
         slug: 'string',
         $$strict: true,
       },
-      async handler(req, res) {
-        const params = { ...req.params, ...req.query, ...req.body };
-
+      async handler({ req, res, params }) {
         let post;
         try {
           post = await this.getPostBySlug(params.slug);
@@ -86,9 +82,7 @@ module.exports = {
         slug: 'string',
         $$strict: true,
       },
-      async handler(req, res) {
-        const params = { ...req.params, ...req.query, ...req.body };
-
+      async handler({ req, res, params }) {
         let result;
         try {
           // post = await this.getPostBySlug(params.slug);
@@ -119,9 +113,7 @@ module.exports = {
         tags: { type: 'array', items: 'string', optional: true },
         $$strict: true,
       },
-      async handler(req, res) {
-        const params = { ...req.params, ...req.query, ...req.body };
-
+      async handler({ req, res, params }) {
         const slug = this.createSlug(params.title);
 
         let post;
@@ -150,9 +142,7 @@ module.exports = {
         id: 'string',
         $$strict: true,
       },
-      async handler(req, res) {
-        const params = { ...req.params, ...req.query, ...req.body };
-
+      async handler({ req, res, params }) {
         let post;
         try {
           post = await this.getPostById(params.id);
@@ -191,9 +181,7 @@ module.exports = {
         tags: { type: 'array', items: 'string', optional: true, optional: true },
         $$strict: true,
       },
-      async handler(req, res) {
-        const params = { ...req.params, ...req.query, ...req.body };
-
+      async handler({ req, res, params }) {
         let post;
         try {
           post = await this.getPostBySlug(params.slug);
@@ -234,7 +222,7 @@ module.exports = {
       params: {
         $$strict: true,
       },
-      async handler(req, res) {
+      async handler({ req, res }) {
         try {
           // TODO: cache this
           return res.send(await Post.distinct('tags'));

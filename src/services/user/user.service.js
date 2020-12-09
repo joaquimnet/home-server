@@ -15,8 +15,7 @@ module.exports = {
         id: 'string',
         $$strict: true,
       },
-      async handler(req, res) {
-        const params = { ...req.params, ...req.query, ...req.body };
+      async handler({ req, res, params }) {
         let user;
         try {
           user = await User.findById(params.id).exec();

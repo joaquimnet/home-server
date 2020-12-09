@@ -23,11 +23,11 @@ module.exports = {
   actions: {
     me: {
       middleware: [express.json(), auth({ required: true })],
-      handler(req, res) {
+      handler({ req, res }) {
         res.send(req.user);
       },
     },
-    async refreshToken(req, res) {
+    async refreshToken({ req, res }) {
       const refreshToken = req.headers['authorization']?.slice(7);
       const verify = promisify(jwt.verify);
       try {
@@ -52,8 +52,8 @@ module.exports = {
         $$strict: true,
       },
       middleware: [express.json()],
-      async handler(req, res) {
-        const { email, password } = req.body;
+      async handler({ req, res, params }) {
+        const { email, password } = params;
 
         const user = await User.findOne({ email }).exec();
 
@@ -87,7 +87,7 @@ module.exports = {
         return res.json({ user: user.safe(), refreshToken, accessToken });
       },
     },
-    async logout(req, res) {
+    async logout({ req, res }) {
       const refreshToken = req.headers['authorization']?.slice(7);
       const verify = promisify(jwt.verify);
 
@@ -128,9 +128,8 @@ module.exports = {
         },
         $$strict: true,
       },
-      async handler(req, res) {
+      async handler({ req, res, params }) {
         return res.status(403).send({ message: 'Account creation is disabled for now' });
-        const params = { ...req.body, ...req.query };
 
         const email = params.email.trim();
         const confirmEmail = params.confirmEmail.trim();

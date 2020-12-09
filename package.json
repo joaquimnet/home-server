@@ -22,7 +22,7 @@
     "mongoose": "^5.10.17",
     "morgan": "^1.10.0",
     "node-cache": "^5.1.2",
-    "ponaserv": "^0.1.0",
+    "ponaserv": "^0.2.0",
     "slugify": "^1.4.6",
     "tinv": "^1.0.1",
     "validator": "^13.1.17"
