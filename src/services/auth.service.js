@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 const express = require('express');
 const rateLimiter = require('express-rate-limit');
 const validator = require('validator');
@@ -58,17 +59,23 @@ module.exports = {
         const user = await User.findOne({ email }).exec();
 
         if (!user) {
-          return res.status(401).json({ message: 'Invalid email or password.' });
+          return res
+            .status(401)
+            .json({ message: 'Invalid email or password.' });
         }
 
         const samePassword = await bcrypt.compare(password, user.password);
 
         if (!samePassword) {
-          return res.status(401).json({ message: 'Invalid email or password.' });
+          return res
+            .status(401)
+            .json({ message: 'Invalid email or password.' });
         }
 
         // JWT
-        const refreshToken = jwt.sign({ sub: user._id }, JWT_REFRESH_SECRET, { expiresIn: 604800 }); // 1 week
+        const refreshToken = jwt.sign({ sub: user._id }, JWT_REFRESH_SECRET, {
+          expiresIn: 604800,
+        }); // 1 week
         const accessToken = await this.generateAccessToken(user._id);
 
         try {
@@ -129,7 +136,9 @@ module.exports = {
         $$strict: true,
       },
       async handler({ req, res, params }) {
-        return res.status(403).send({ message: 'Account creation is disabled for now' });
+        return res
+          .status(403)
+          .send({ message: 'Account creation is disabled for now' });
 
         const email = params.email.trim();
         const confirmEmail = params.confirmEmail.trim();
@@ -150,7 +159,9 @@ module.exports = {
         }).exec();
 
         if (emailCount > 0) {
-          return res.status(400).json({ message: 'This email address is already in use' });
+          return res
+            .status(400)
+            .json({ message: 'This email address is already in use' });
         }
 
         const hash = await this.hashPassword(password);
@@ -175,10 +186,15 @@ module.exports = {
     },
     generateAccessToken(userId) {
       return new Promise((resolve, reject) => {
-        jwt.sign({ sub: userId }, JWT_TOKEN_SECRET, { expiresIn: 1200 }, (err, token) => {
-          if (err) reject(err);
-          resolve(token);
-        });
+        jwt.sign(
+          { sub: userId },
+          JWT_TOKEN_SECRET,
+          { expiresIn: 1200 },
+          (err, token) => {
+            if (err) reject(err);
+            resolve(token);
+          },
+        );
       });
     },
   },

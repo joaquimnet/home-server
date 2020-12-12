@@ -1,7 +1,7 @@
 const log = require('consola');
 const jwt = require('jsonwebtoken');
 
-const { JWT_TOKEN_SECRET, JWT_REFRESH_SECRET, ERRORS } = require('../config');
+const { JWT_TOKEN_SECRET, ERRORS } = require('../config');
 const User = require('../models/user.model');
 const Session = require('../models/session.model');
 

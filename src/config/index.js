@@ -15,6 +15,9 @@ const ERRORS = {
     INVALID_TOKEN: { message: 'Invalid token, please log in again' },
     UNAUTHORIZED: { message: "You're not authorized to perform that action" },
   },
+  CUSTOM(message) {
+    return { message };
+  },
 };
 
 mongoose
