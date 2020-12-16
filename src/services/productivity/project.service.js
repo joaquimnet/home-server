@@ -29,6 +29,7 @@ module.exports = {
             'connections.notes',
             'connections.todos',
             'connections.projects',
+            'connections.epics',
           ]);
         } catch (err) {
           if (err instanceof Error.CastError) {
