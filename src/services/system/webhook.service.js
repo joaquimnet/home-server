@@ -14,18 +14,19 @@ module.exports = {
 
   actions: {
     webhook: {
-      middleware: [express.json()],
+      middleware: [express.text({ type: 'application/json' })],
       async handler({ req, res }) {
-        log.info(req.body);
+        const textBody = req.body;
+        const jsonBody = JSON.parse(textBody);
+
+        log.info(jsonBody);
 
         const key = SENDGRID_SIGN_KEY;
 
         const signature = req.get(EventWebhookHeader.SIGNATURE());
         const timestamp = req.get(EventWebhookHeader.TIMESTAMP());
 
-        const requestBody = req.body;
-
-        if (!this.verifyRequest(key, requestBody, signature, timestamp)) {
+        if (!this.verifyRequest(key, textBody, signature, timestamp)) {
           return res
             .status(403)
             .send(ERRORS.CUSTOM('Invalid Sendgrid signature'));
@@ -33,7 +34,7 @@ module.exports = {
 
         const webhooklog = new WebhookLog({
           headers: req.headers,
-          body: req.body,
+          body: jsonBody,
         });
         try {
           await webhooklog.save();
