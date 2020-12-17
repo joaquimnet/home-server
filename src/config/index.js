@@ -6,6 +6,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const PORT = process.env.PORT;
 const JWT_TOKEN_SECRET = process.env.JWT_TOKEN_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
+const SENDGRID_SIGN_KEY = process.env.SENDGRID_SIGN_KEY;
 
 const ERRORS = {
   GENERIC: { message: 'Something went wrong, please try again later' },
@@ -41,4 +42,5 @@ module.exports = {
   JWT_TOKEN_SECRET,
   JWT_REFRESH_SECRET,
   ERRORS,
+  SENDGRID_SIGN_KEY,
 };
