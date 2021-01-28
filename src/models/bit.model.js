@@ -18,6 +18,11 @@ const schema = new Schema(
       type: [String],
       default: [],
     },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
   },
   { timestamps: true },
 );
