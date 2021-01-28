@@ -19,10 +19,10 @@ module.exports = {
         tags: { type: 'array', items: 'string', optional: true },
         $$strict: true,
       },
-      async handler({ params, res }) {
+      async handler({ req, params, res }) {
         let bit;
         try {
-          bit = new Bit(params);
+          bit = new Bit({ ...params, author: req.user._id });
           bit.save();
         } catch (err) {
           return res.status(500).send(ERRORS.GENERIC);
@@ -31,13 +31,18 @@ module.exports = {
       },
     },
     listBits: {
+      middleware: [express.json(), auth({ required: true })],
       params: {
+        search: { type: 'string', optional: true },
         $$strict: true,
       },
-      async handler({ res }) {
+      async handler({ req, res, params }) {
         let bits;
         try {
-          bits = await Bit.find({});
+          bits = await Bit.find({
+            author: req.user._id,
+            $text: { $search: params.search },
+          });
         } catch (err) {
           return res.status(500).send(ERRORS.GENERIC);
         }
