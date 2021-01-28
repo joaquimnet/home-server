@@ -1,5 +1,8 @@
-const Bit = require('../../models/bit.model');
+const express = require('express');
+
 const { ERRORS } = require('../../config');
+const Bit = require('../../models/bit.model');
+const auth = require('../../middleware/jwt');
 
 module.exports = {
   name: 'knowledge',
@@ -9,6 +12,7 @@ module.exports = {
   },
   actions: {
     postBit: {
+      middleware: [express.json(), auth({ required: true })],
       params: {
         name: { type: 'string', min: 3, max: 255 },
         content: { type: 'string', min: 3, max: 255 },
