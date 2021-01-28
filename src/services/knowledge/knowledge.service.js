@@ -23,6 +23,7 @@ module.exports = {
         let bit;
         try {
           bit = new Bit(params);
+          bit.save();
         } catch (err) {
           return res.status(500).send(ERRORS.GENERIC);
         }
