@@ -1,4 +1,5 @@
 const express = require('express');
+const log = require('consola');
 
 const { ERRORS } = require('../../config');
 const Bit = require('../../models/bit.model');
@@ -44,6 +45,7 @@ module.exports = {
             $text: { $search: params.search },
           });
         } catch (err) {
+          log.error(err);
           return res.status(500).send(ERRORS.GENERIC);
         }
         return res.status(201).send(bits);
