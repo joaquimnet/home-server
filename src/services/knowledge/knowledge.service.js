@@ -40,10 +40,13 @@ module.exports = {
       async handler({ req, res, params }) {
         let bits;
         try {
-          bits = await Bit.find({
-            author: req.user._id,
-            $text: { $search: params.search },
-          });
+          bits = await Bit.find(
+            {
+              author: req.user._id,
+              $text: { $search: params.search },
+            },
+            { score: { $meta: 'textScore' } },
+          );
         } catch (err) {
           log.error(err);
           return res.status(500).send(ERRORS.GENERIC);
