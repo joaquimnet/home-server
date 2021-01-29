@@ -33,4 +33,7 @@ schema.methods.safe = function safe() {
   return this.toObject({ versionKey: false });
 };
 
+/**
+ * @type import('mongoose').Model
+ */
 module.exports = model('bit', schema);

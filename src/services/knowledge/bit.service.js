@@ -10,6 +10,7 @@ module.exports = {
   routes: {
     'POST /knowledge/bit': 'postBit',
     'GET /knowledge/bit': 'listBits',
+    'DELETE /knowledge/bit/:id': 'deleteBit',
   },
   actions: {
     postBit: {
@@ -55,6 +56,41 @@ module.exports = {
           return res.status(500).send(ERRORS.GENERIC);
         }
         return res.status(201).send(bits);
+      },
+    },
+    deleteBit: {
+      middleware: [express.json(), auth({ required: true })],
+      params: {
+        id: 'string',
+        $$strict: true,
+      },
+      async handler({ req, res, params }) {
+        let bit;
+        try {
+          bit = await Bit.findById(params.id);
+          if (!bit) {
+            return res.status(404).send(ERRORS.NOT_FOUND);
+          }
+        } catch (err) {
+          if (err instanceof Error.CastError) {
+            return res.status(404).send(ERRORS.NOT_FOUND);
+          }
+          log.error(err);
+          return res.status(500).send(ERRORS.GENERIC);
+        }
+
+        if (bit.author._id.toString() !== req.user._id.toString()) {
+          return res.status(403).send(ERRORS.AUTH.UNAUTHORIZED);
+        }
+
+        try {
+          await Bit.findByIdAndDelete(bit._id).exec();
+        } catch (err) {
+          log.error(err);
+          return res.status(500).send(ERRORS.GENERIC);
+        }
+
+        res.status(204).end();
       },
     },
   },
