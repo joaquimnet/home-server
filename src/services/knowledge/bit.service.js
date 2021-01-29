@@ -6,7 +6,7 @@ const Bit = require('../../models/bit.model');
 const auth = require('../../middleware/jwt');
 
 module.exports = {
-  name: 'knowledge',
+  name: 'bit',
   routes: {
     'POST /knowledge/bit': 'postBit',
     'GET /knowledge/bit': 'listBits',
