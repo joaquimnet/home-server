@@ -67,7 +67,7 @@ module.exports = {
       async handler({ req, res, params }) {
         let bit;
         try {
-          bit = await Bit.find({ _id: params.id }).populate('author').exec();
+          bit = await Bit.findById(params.id);
           if (!bit) {
             return res.status(404).send(ERRORS.NOT_FOUND);
           }
