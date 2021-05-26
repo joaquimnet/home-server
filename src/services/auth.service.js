@@ -189,7 +189,7 @@ module.exports = {
         jwt.sign(
           { sub: userId },
           JWT_TOKEN_SECRET,
-          { expiresIn: 1200 },
+          { expiresIn: '1d' },
           (err, token) => {
             if (err) reject(err);
             resolve(token);
