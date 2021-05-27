@@ -7,6 +7,9 @@ const PORT = process.env.PORT;
 const JWT_TOKEN_SECRET = process.env.JWT_TOKEN_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 const SENDGRID_SIGN_KEY = process.env.SENDGRID_SIGN_KEY;
+const GOOGLE_BUCKET_NAME = process.env.GOOGLE_BUCKET_NAME;
+const GOOGLE_BUCKET_KEY = process.env.GOOGLE_BUCKET_KEY;
+const GOOGLE_PROJECT_ID = process.env.GOOGLE_PROJECT_ID;
 
 const ERRORS = {
   GENERIC: { message: 'Something went wrong, please try again later' },
@@ -43,4 +46,7 @@ module.exports = {
   JWT_REFRESH_SECRET,
   ERRORS,
   SENDGRID_SIGN_KEY,
+  GOOGLE_BUCKET_NAME,
+  GOOGLE_BUCKET_KEY,
+  GOOGLE_PROJECT_ID,
 };
