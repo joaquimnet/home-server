@@ -85,7 +85,10 @@ module.exports = {
             .save()
             .then(() => {
               res.status(201).json({
-                blob: blob.name,
+                success: 1,
+                file: {
+                  url: `http://img.assets.work/home/${blob.name}`,
+                },
               });
             })
             .catch((err) => {
