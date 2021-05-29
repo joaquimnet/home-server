@@ -109,7 +109,7 @@ module.exports = {
       },
     },
     createPost: {
-      middleware: [express.json(), auth({ required: true })],
+      middleware: [express.json({ limit: '50MB' }), auth({ required: true })],
       params: {
         title: { type: 'string', min: 3, max: 128 },
         content: {
@@ -147,7 +147,7 @@ module.exports = {
       },
     },
     deletePost: {
-      middleware: [express.json(), auth({ required: true })],
+      middleware: [express.json({ limit: '50MB' }), auth({ required: true })],
       params: {
         id: 'string',
         $$strict: true,
@@ -182,7 +182,7 @@ module.exports = {
       },
     },
     editPost: {
-      middleware: [express.json(), auth({ required: true })],
+      middleware: [express.json({ limit: '50MB' }), auth({ required: true })],
       params: {
         slug: 'string',
         title: { type: 'string', min: 3, max: 128, optional: true },
