@@ -13,12 +13,22 @@ const schema = new Schema(
       type: String,
       required: true,
       minlength: 3,
-      maxlength: 128,
+      maxlength: 255,
     },
     content: {
-      type: String,
+      type: [
+        {
+          blockType: {
+            type: String,
+            maxlength: 255,
+          },
+          data: {
+            type: String,
+            maxlength: 1000000,
+          },
+        },
+      ],
       required: true,
-      minlength: 3,
     },
     description: {
       type: String,
@@ -32,15 +42,25 @@ const schema = new Schema(
       required: true,
     },
     tags: {
-      type: [String],
+      type: [
+        {
+          type: String,
+          maxlength: 255,
+        },
+      ],
       default: [],
     },
     meta: {
       likes: { type: Number, default: 0 },
       views: { type: Number, default: 0 },
+      isDraft: { type: Boolean, default: false },
+      isPublished: { type: Boolean, default: false },
     },
   },
   { timestamps: true },
 );
 
+/**
+ * @type import('mongoose').Model
+ */
 module.exports = model('post', schema);

@@ -112,7 +112,13 @@ module.exports = {
       middleware: [express.json(), auth({ required: true })],
       params: {
         title: { type: 'string', min: 3, max: 128 },
-        content: { type: 'string', min: 3 },
+        content: {
+          type: 'array',
+          items: {
+            type: 'object',
+            props: { blockType: { type: 'string', max: 255 }, data: 'string' },
+          },
+        },
         description: { type: 'string', min: 3, max: 280 },
         tags: { type: 'array', items: 'string', optional: true },
         $$strict: true,
@@ -180,7 +186,14 @@ module.exports = {
       params: {
         slug: 'string',
         title: { type: 'string', min: 3, max: 128, optional: true },
-        content: { type: 'string', min: 3, optional: true },
+        content: {
+          type: 'array',
+          items: {
+            type: 'object',
+            props: { blockType: { type: 'string', max: 255 }, data: 'string' },
+          },
+          optional: true,
+        },
         description: { type: 'string', min: 3, max: 280, optional: true },
         tags: { type: 'array', items: 'string', optional: true },
         $$strict: true,

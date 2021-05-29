@@ -34,8 +34,8 @@ module.exports = {
 
   actions: {
     uploadImage: {
-      middleware: [auth({ required: true }), multer().single('file')],
-      async handler({ params, req, res, next }) {
+      middleware: [auth({ required: true }), multer().single('image')],
+      async handler({ params, req, res }) {
         // do stuff
         const storage = new Storage({
           projectId: GOOGLE_PROJECT_ID,
@@ -103,7 +103,7 @@ module.exports = {
       },
     },
     uploadImageByUrl: {
-      middleware: [auth({ required: true }), multer().single('file')],
+      middleware: [auth({ required: true })],
       async handler({ params, res }) {
         const { url } = params;
 
